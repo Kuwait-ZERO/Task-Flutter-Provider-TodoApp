@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/provider/todo_provider.dart';
 
 class AddPage extends StatelessWidget {
   AddPage({Key? key}) : super(key: key);
+
   final todoController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add"),
+        title: const Text("Add Todo"),
+        centerTitle: true,
         backgroundColor: Colors.amber.shade300,
       ),
       body: Center(
@@ -23,15 +28,19 @@ class AddPage extends StatelessWidget {
                   hintText: 'Your todo',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(
-                      width: 1,
-                    ),
+                    borderSide: const BorderSide(width: 1),
                   ),
                 ),
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                if (todoController.text.isNotEmpty) {
+                  Provider.of<TodoProvider>(context, listen: false)
+                      .addTodo(title: todoController.text);  // Pass the title here
+                  GoRouter.of(context).pop();  // Go back to HomePage
+                }
+              },
               style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all<Color>(Colors.amber.shade300),
@@ -45,7 +54,7 @@ class AddPage extends StatelessWidget {
                 padding: EdgeInsets.all(8.0),
                 child: Text("Add"),
               ),
-            )
+            ),
           ],
         ),
       ),
